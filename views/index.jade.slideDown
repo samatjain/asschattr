@@ -1,0 +1,70 @@
+doctype 5
+html
+	head
+		title assChattr
+
+		meta(charset='utf-8')
+		meta(name='viewport',content='width=device-width, initial-scale=1, user-scalable=no')
+
+		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css')
+		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css')
+		script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js')
+		script(src='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js')
+		script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js')
+		script(src='//cdnjs.cloudflare.com/ajax/libs/jquery.transit/0.9.9/jquery.transit.min.js')
+		script(src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.1.0/moment.min.js')
+
+		style .
+			body {
+				letter-spacing: -0.01em;
+			}
+
+			.chatEntry {
+				padding: 1ex;
+				border-bottom: 1px solid #ddd;
+			}
+
+			.chatEntry time {
+				font-style: italic;
+				color: silver;
+			}
+
+		script .
+			var socket = io.connect('http://asschattr.animevivo.com/');
+			socket.on('incoming', function(data) {
+				console.log('incoming: ' + data.msg);
+				var $new_entry = $('<div class="chatEntry" style="display: none;">' + data.msg + ' <time datetime=' + data.date + '>a few seconds ago</time></div>');
+
+				$('.chatEntry time').each(function() {
+					var $e = $(this);
+					var time_text = $e.attr('datetime');
+					time_text = moment(time_text).fromNow();
+					$e.text(time_text);
+				});
+
+				$('#output').prepend($new_entry);
+
+				$new_entry.slideDown('slow');
+			});
+
+			function sendstuff() {
+				var msg = $('input[name=entry]').val()
+				var now = moment().toJSON();
+				console.log('sending msg to server: ' + msg);
+				window.socket.emit('msg', {'date': now, msg: msg});
+			}
+	body
+		div(class='navbar navbar-static-top')
+			div(class='navbar-inner')
+				div(class='container')
+					a(class='brand',href='http://asschattr.animevivo.com') assChattr
+					ul(class='nav')
+						li
+							a(href='/about.html') about
+
+		form(onsubmit="sendstuff(); return false")
+			div(class='input-append')
+				input(type='text',name='entry')
+				button(type='submit',class='btn') chat
+
+		article(id='output')
