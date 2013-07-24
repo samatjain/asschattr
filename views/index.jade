@@ -6,8 +6,8 @@ html
 		meta(charset='utf-8')
 		meta(name='viewport',content='width=device-width, initial-scale=1, user-scalable=no')
 
-		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css')
 		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css')
+		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css')
 		script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js')
 		script(src='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js')
 		script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js')
@@ -17,6 +17,10 @@ html
 		style .
 			body {
 				letter-spacing: -0.01em;
+			}
+
+			form {
+				margin: 0;
 			}
 
 			.chatEntry {
@@ -77,17 +81,14 @@ html
 				$('input[name=entry]').val('');
 			}
 	body
-		div(class='navbar navbar-static-top')
+		div(class='navbar navbar-fixed-top')
 			div(class='navbar-inner')
 				div(class='container')
 					a(class='brand',href='http://asschattr.animevivo.com') assChattr
-					ul(class='nav')
-						li
-							a(href='/about.html') about
+					form(class='navbar-form',onsubmit="sendstuff(); return false")
+						input(type='text',name='entry',autocomplete='off')
+						button(type='submit',class='btn') chat
 
-		form(class='form-inline',onsubmit="sendstuff(); return false")
-			input(type='text',name='entry')
-			button(type='submit',class='btn') chat
 
 
 		article(id='output')
