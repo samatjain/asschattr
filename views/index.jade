@@ -25,14 +25,14 @@ html
 
 			.chatEntry {
 				height: 0px;
-				max-height: 9999px;
+				max-height: 1000em;
 				opacity: 0;
 				display: block;
 				padding: 1ex;
 				border-bottom: 1px solid #ddd;
-				transition: all 1s ease;
-				-moz-transition: all 1s ease;
-				-webkit-transition: all 1s ease;
+				transition: all 100ms ease;
+				-moz-transition: all 100ms ease;
+				-webkit-transition: all 100ms ease;
 				background-color: white;
 				overflow: hidden;
 			}
@@ -59,10 +59,10 @@ html
 
 				// Hack for being unable to transition to height: auto
 				var $clone = $new_entry.clone();
-				$clone.css({'position': 'absolute',
+				$clone.css({'position': 'relative',
 										'visibility': 'hidden',
 										'height': 'auto'})
-							.addClass('slideClone').appendTo('body');
+							.addClass('slideClone').appendTo('#output');
 				var height = $clone.height();
 				$clone.remove();
 
