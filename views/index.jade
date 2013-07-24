@@ -25,6 +25,7 @@ html
 
 			.chatEntry {
 				height: 0px;
+				max-height: 9999px;
 				opacity: 0;
 				display: block;
 				padding: 1ex;
@@ -34,7 +35,6 @@ html
 				-webkit-transition: all 1s ease;
 				background-color: white;
 				overflow: hidden;
-				max-height: 100em;
 			}
 
 			.chatEntry time {
@@ -57,18 +57,20 @@ html
 
 				$('#output').prepend($new_entry);
 
-				$new_entry.css({'height': 'auto',
-												'position': 'static'});
-				var height = $new_entry.height();
+				// Hack for being unable to transition to height: auto
+				var $clone = $new_entry.clone();
+				$clone.css({'position': 'absolute',
+										'visibility': 'hidden',
+										'height': 'auto'})
+							.addClass('slideClone').appendTo('body');
+				var height = $clone.height();
+				$clone.remove();
+
 				console.log(height);
 
 				// Make entry visible…
-				$new_entry.css({'height': '0px',
-												'position': 'relative',
-												'opacity': '0',
-												'visibility': 'visible'});
-				// …and start the animation
-				$new_entry.css({'height': height + 'px',
+				$new_entry.css({'visibility': 'visible',
+												'height': height + 'px',
 												'opacity': 1});
 			});
 
@@ -89,6 +91,4 @@ html
 						input(type='text',name='entry',autocomplete='off')
 						button(type='submit',class='btn') chat
 
-
-
-		article(id='output')
+		article(id='output',class='container')
