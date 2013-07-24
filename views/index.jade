@@ -8,11 +8,6 @@ html
 
 		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css')
 		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css')
-		script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js')
-		script(src='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js')
-		script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js')
-		script(src='//cdnjs.cloudflare.com/ajax/libs/jquery.transit/0.9.9/jquery.transit.min.js')
-		script(src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.1.0/moment.min.js')
 
 		style .
 			body {
@@ -42,6 +37,21 @@ html
 				color: silver;
 			}
 
+	body
+		div(class='navbar navbar-fixed-top')
+			div(class='navbar-inner')
+				div(class='container')
+					a(class='brand',href='http://asschattr.animevivo.com') assChattr
+					form(class='navbar-form',onsubmit="sendstuff(); return false")
+						input(type='text',name='entry',autocomplete='off')
+						button(type='submit',class='btn') chat
+
+		article(id='output',class='container')
+
+		script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js')
+		script(src='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js')
+		script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js')
+		script(src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.1.0/moment.min.js')
 		script .
 			var socket = io.connect();
 			socket.on('incoming', function(data) {
@@ -82,13 +92,3 @@ html
 				window.socket.emit('msg', {'date': now, msg: msg});
 				$('input[name=entry]').val('');
 			}
-	body
-		div(class='navbar navbar-fixed-top')
-			div(class='navbar-inner')
-				div(class='container')
-					a(class='brand',href='http://asschattr.animevivo.com') assChattr
-					form(class='navbar-form',onsubmit="sendstuff(); return false")
-						input(type='text',name='entry',autocomplete='off')
-						button(type='submit',class='btn') chat
-
-		article(id='output',class='container')
