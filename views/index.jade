@@ -57,7 +57,15 @@ html
 		div(class='navbar navbar-static-top')
 			div(class='navbar-inner')
 				div(class='container')
-					a(class='brand',href='http://asschattr.animevivo.com') assChattr
+					ul(class='nav')
+						li(class='dropdown')
+							a(id='menu',class='brand dropdown-toggle',data-toggle='dropdown',data-target='#',href='http://asschattr.animevivo.com') assChattr <b class='caret'></b>
+							ul(class='dropdown-menu',role='menu')
+								li
+									a(href='/') Home
+								li(class='divider')
+								li
+									a(href='#',id='clear-entries') Clear chat log
 					form(id='chat',class='navbar-form')
 						input(class='input-xxlarge',type='text',name='entry',placeholder='type your chat message here, & press enter to send',autocomplete='off',autofocus='autofocus')
 						button(class='btn',type='submit') ♥
@@ -139,4 +147,13 @@ html
 			// were animated) stay visible
 			$(window).on('resize orientationchange', function() {
 				$('.chatEntry').css({'height': 'auto'});
+			});
+
+			$('#clear-entries').on('click', function(ev) {
+				ev.preventDefault();
+
+				$('.chatEntry').css({'height': 0, 'opacity': 0})
+				.on('transitionend', function() {
+					$('#output').empty();
+				});
 			});
