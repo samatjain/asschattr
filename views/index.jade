@@ -133,13 +133,10 @@ html
 			$(document).ready(function() {
 				var $welcome_msg = $('<div class="chatEntry">Welcome to <strong>asschattr</strong>. If people are around, you can listen in and wait for messages to appear—or just start typing and send one yourself!</div>');
 				appendNewMessage($welcome_msg);
-
 			});
 
 			// Make sure events already displayed (which are fixed-height since they
 			// were animated) stay visible
-			// FIXME: this isn't being fired?
-			$(document).on('resize orientationchange', function() {
-				console.log('resize event fired');
+			$(window).on('resize orientationchange', function() {
 				$('.chatEntry').css({'height': 'auto'});
 			});
