@@ -33,6 +33,7 @@ html
 				background-color: white;
 				overflow: hidden;
 				line-height: 0.9em;
+				visibility: hidden;
 			}
 
 			.chatEntry time {
@@ -58,7 +59,7 @@ html
 				div(class='container')
 					a(class='brand',href='http://asschattr.animevivo.com') assChattr
 					form(id='chat',class='navbar-form')
-						input(class='input-xxlarge',type='text',name='entry',placeholder='your chat message here',autocomplete='off',autofocus='autofocus')
+						input(class='input-xxlarge',type='text',name='entry',placeholder='type your chat message here, & press enter to send',autocomplete='off',autofocus='autofocus')
 						button(class='btn',type='submit') ♥
 
 		article(id='output',class='container')
@@ -95,6 +96,10 @@ html
 					$e.text(time_text);
 				});
 
+				appendNewMessage($new_entry);
+			});
+
+			function appendNewMessage($new_entry) {
 				$('#output').prepend($new_entry);
 
 				// Hack for being unable to transition to height: auto
@@ -112,8 +117,7 @@ html
 				$new_entry.css({'visibility': 'visible',
 												'height': height + 'px',
 												'opacity': 1});
-				// Fix text scaling
-			});
+			}
 
 			$('#chat').on('submit', function(ev) {
 				ev.preventDefault();
@@ -124,4 +128,18 @@ html
 				console.log('sending msg to server: ' + msg);
 				window.socket.emit('msg', {'date': now, msg: msg});
 				$('input[name=entry]').val('');
+			});
+
+			$(document).ready(function() {
+				var $welcome_msg = $('<div class="chatEntry">Welcome to <strong>asschattr</strong>. If people are around, you can listen in and wait for messages to appear—or just start typing and send one yourself!</div>');
+				appendNewMessage($welcome_msg);
+
+			});
+
+			// Make sure events already displayed (which are fixed-height since they
+			// were animated) stay visible
+			// FIXME: this isn't being fired?
+			$(document).on('resize orientationchange', function() {
+				console.log('resize event fired');
+				$('.chatEntry').css({'height': 'auto'});
 			});
