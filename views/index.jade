@@ -60,9 +60,12 @@ html
 		footer(class='footer')
 			div(class='container')
 				p .
-					assChattr lets you be an asshole on the Internet, and helps connect you w/ other assholes. Hopefully, we can all find meaning in the world.
+					<strong>assChattr</strong> lets you be an asshole on the Internet, without having to be an asshole in real life. Connect with other assholes and together, find meaning in the world.
+				img(src='/images/puppy-and-kitten.png',height='250',width='350',alt='puppy & kitten')
 				p .
-					Designed & built w/ all the love in the world by
+					Designed & built with ♥ in New Mexico, the <a href="http://www.kob.com/article/stories/s3077298.shtml">worst place to be a child</a>.
+				p .
+					Created by
 					<a href="https://twitter.com/SamatJain">@SamatJain</a>
 					(<a href="https://identi.ca/samatjain">also on Pump.io</a>),
 					Kenny Jacobs, and Antonio Arredondo. Thanks to an extremely supportive Felicia Frizzell.
@@ -103,6 +106,7 @@ html
 				$new_entry.css({'visibility': 'visible',
 												'height': height + 'px',
 												'opacity': 1});
+				// Fix text scaling
 			});
 
 			function sendstuff() {
