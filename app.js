@@ -29,6 +29,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
+app.get('/fuq', routes.fuq);
 app.get('/:hashtag', routes.index);
 app.get('/users', user.list);
 

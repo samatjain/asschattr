@@ -1,7 +1,7 @@
 doctype 5
 html
 	head
-		title asschattr
+		title frequently unasked questions (fuq) — asschattr
 
 		meta(charset='utf-8')
 		meta(name='viewport',content='width=device-width, initial-scale=1, user-scalable=no')
@@ -63,7 +63,6 @@ html
 							ul(class='dropdown-menu',role='menu')
 								li
 									a(href='/') home
-									a(href='/fuq') frequently unasked questions (fuq)
 								li(class='divider')
 								li
 									a(href='#',id='clear-entries') clear chat log
@@ -71,7 +70,8 @@ html
 						input(class='input-xxlarge',type='text',name='entry',placeholder='type your chat message here, & press enter to send',autocomplete='off',autofocus='autofocus')
 						button(class='btn',type='submit') ♥
 
-		article(id='output',class='container')
+		article(class='container')
+			h1 frequently asked questions
 
 		footer(class='footer')
 			div(class='container')
@@ -137,11 +137,6 @@ html
 				console.log('sending msg to server: ' + msg);
 				window.socket.emit('msg', {'date': now, msg: msg});
 				$('input[name=entry]').val('');
-			});
-
-			$(document).ready(function() {
-				var $welcome_msg = $('<div class="chatEntry">Welcome to <strong>asschattr</strong>. If people are around, you can listen in and wait for messages to appear—or just start typing and send one yourself!</div>');
-				appendNewMessage($welcome_msg);
 			});
 
 			// Make sure events already displayed (which are fixed-height since they
