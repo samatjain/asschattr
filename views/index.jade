@@ -28,6 +28,8 @@ html
 				transition: all 200ms ease;
 				-moz-transition: all 200ms ease;
 				-webkit-transition: all 200ms ease;
+				-o-transition: all 200ms ease;
+				-ms-transition: all 200ms ease;
 				background-color: white;
 				overflow: hidden;
 				line-height: 0.9em;
@@ -56,8 +58,8 @@ html
 				div(class='container')
 					a(class='brand',href='http://asschattr.animevivo.com') assChattr
 					form(id='chat',class='navbar-form')
-						input(type='text',name='entry',autocomplete='off',autofocus='autofocus')
-						button(type='submit',class='btn') chat
+						input(class='input-xxlarge',type='text',name='entry',placeholder='your chat message here',autocomplete='off',autofocus='autofocus')
+						button(class='btn',type='submit') ♥
 
 		article(id='output',class='container')
 
