@@ -38,6 +38,10 @@ html
 				color: silver;
 			}
 
+			#output {
+				margin-top: 1ex;
+			}
+
 			footer {
 				border-top: 1px solid rgb(229, 229, 229);
 				background-color: rgb(245, 245, 245);
@@ -51,8 +55,8 @@ html
 			div(class='navbar-inner')
 				div(class='container')
 					a(class='brand',href='http://asschattr.animevivo.com') assChattr
-					form(class='navbar-form',onsubmit="sendstuff(); return false")
-						input(type='text',name='entry',autocomplete='off')
+					form(id='chat',class='navbar-form')
+						input(type='text',name='entry',autocomplete='off',autofocus='autofocus')
 						button(type='submit',class='btn') chat
 
 		article(id='output',class='container')
@@ -109,11 +113,13 @@ html
 				// Fix text scaling
 			});
 
-			function sendstuff() {
+			$('#chat').on('submit', function(ev) {
+				ev.preventDefault();
+
 				var msg = $('input[name=entry]').val()
 				if (!msg) return;
 				var now = moment().toJSON();
 				console.log('sending msg to server: ' + msg);
 				window.socket.emit('msg', {'date': now, msg: msg});
 				$('input[name=entry]').val('');
-			}
+			});
