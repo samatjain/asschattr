@@ -47,6 +47,10 @@ html
 				color: silver;
 			}
 
+			.author {
+				font-weight: 600;
+			}
+
 			#chat-log {
 				margin-top: 1ex;
 			}
@@ -102,7 +106,7 @@ html
 			var socket = io.connect();
 			socket.on('incoming', function(data) {
 				console.log('incoming: ' + data.msg);
-				var $new_entry = $('<article>' + data.msg + ' <time datetime=' + data.date + '>a few seconds ago</time></article>');
+				var $new_entry = $('<article><span class="author">' + data.screenname + ' • </span> ' + data.msg + ' <time datetime=' + data.date + '>a few seconds ago</time></article>');
 
 				appendNewMessage($new_entry);
 			});
@@ -138,13 +142,21 @@ html
 				if (!msg) return;
 				var now = moment().toJSON();
 				console.log('sending msg to server: ' + msg);
-				window.socket.emit('msg', {'date': now, msg: msg});
+				window.socket.emit('msg', {'date': now, msg: msg, screenname: window.screenname});
 				$('input[name=entry]').val('');
 			});
 
 			$(document).ready(function() {
 				var $welcome_msg = $('<article>Welcome to <strong>asschattr</strong>. If people are around, you can listen in and wait for messages to appear—or just start typing and send one yourself!</article>');
 				appendNewMessage($welcome_msg);
+
+				var screenname = generateScreenName();
+				window.screenname = screenname;
+
+				console.log(screenname);
+
+				// This should only happen on connection to server
+				appendNewMessage($('<article>You are now connected to chatroom <strong>default</strong> as <strong>' + screenname + '</strong>. Have a nice day!</article>'));
 			});
 
 			// Make sure events already displayed (which are fixed-height since they
@@ -177,3 +189,48 @@ html
 				});
 			}
 			setInterval(updateTimes, 60000);
+
+			// This should probably be server side…
+			function generateScreenName() {
+				var name;
+				var color = ["white", "black", "yellow", "red", "blue", "green", "purple", "orange", "silver", "scarlet", "rainbow", "indigo", "ivory", "navy", "pink", "gold", "golden"];
+				var nick_adjective = ["alpha", "angry", "bad", "barbaric", "bare", "bitter", "sweet", "brave", "brutal", "crisp", "crunchy", "dancing", "dangerous", "dirty", "dreaded", "elastic", "endless", "dreaded", "eternal", "flaming", "flying", "forgotten", "forsaken", "freaky", "frozen", "furious", "grim", "gruesome", "gutsy", "cruel", "desire", "heavy", "helpless", "hidden", "homeless", "hungry", "insane", "intense", "itchy", "left-handed", "lefty", "liquid", "lone", "lost", "massive", "meaty", "mellow", "modern", "morbid", "moving", "nasty", "needless", "nervous", "old", "pointless", "pure", "rare", "raw", "reborn", "rusty", "richy", "risky", "rocking", "rocky", "rolling", "rough", "running", "runny", "rusty", "ruthless", "sad", "screaming", "serious", "screamy", "seriously", "silly", "skilled", "sleepy", "slidy", "small", "solid", "steamy", "stony", "stormy", "strange", "stray", "streaming", "strong", "supersonic", "tainted", "tidy", "tough", "sunny", "unique", "vicious", "vital", "wild", "wooden", "worthy", "young", "hearty", "bad", "beauty", "boiling", "brave", "chicken", "color", "cool", "crazy", "cute", "cute", "cute", "cutie", "smokey", "disco", "drunken", "drunken", "dusty", "eager", "fast", "fast", "fatty", "flower", "grotesque", "heavy", "hilarious", "honey", "hot", "hungry", "icy", "little", "lone", "lonesome", "fisty", "foxy", "loose", "lucky", "maximum", "minimum", "mysterious", "rapid", "rebel", "rotten", "shining", "skinny", "sleepy", "mini", "maxi", "misty", "slimy", "small", "solid", "stormy", "strong", "stupid", "sunny", "sweet", "sweety", "swift", "sugar", "doggy", "spacy", "stoned", "stony", "tasty", "thirsty", "tiny", "ugly", "warm", "willy", "beau", "honey", "beauty", "chaos", "circus", "cult", "pet"];
+				var nick_animal = ["alligator", "angel", "antelope", "ape", "armadillo", "baboon", "baby", "baby", "baron", "basilisk", "bat", "bear", "bear", "beaver", "bella", "bird", "birdie", "bison", "boar", "boy", "buffalo", "bull", "bunny", "bunny", "butterfly", "camel", "canary", "cat", "cat", "chameleon", "cheetah", "chick", "child", "chimpanzee", "chinchilla", "chipmunk", "cobra", "cockroach", "colt", "cougar", "cow", "coyote", "crocodile", "crow", "cub", "darling", "deer", "dingo", "doe", "doe", "dog", "dog", "dog", "doggy", "doll", "donkey", "dormouse", "dromedary", "duck", "duckbill", "duckie", "duckling", "dugong", "eagle", "eaglet", "elephant", "elf", "fairy", "farrow", "filly", "finch", "fish", "flapper", "flipper", "foal", "fox", "fox", "frog", "froglet", "gazelle", "giraffe", "girl", "gnu", "goat", "gorilla", "grizzly", "guinea", "hamster", "hare", "hatchling", "hawk", "hippopotamus", "hog", "honey", "honey", "horse", "hyena", "ibis", "impala", "infant", "iris", "jackal", "jaguar", "joey", "kangaroo", "kid", "kid", "kiddie", "king", "kit", "kitten", "kitten", "koala", "lama", "lamb", "lamb", "larva", "lemur", "leopard", "lion", "lion", "lizard", "llama", "lovebird", "lynx", "man", "mandrill", "mare", "mink", "mole", "monkey", "moose", "moose", "moose", "mouse", "mouse", "mule", "musk-ox", "mustang", "nymph", "ocelot", "opossum", "orangutan", "otter", "ox", "panda", "panther", "panther", "parakeet", "parrot", "pet", "pig", "pig", "piglet", "pink", "pinkie", "polar-bear", "pony", "prince", "puglet", "puma", "pup", "puppy", "puppy", "python", "queen", "rabbit", "rabbit", "raccoon", "rat", "rat", "reindeer", "reptile", "rhino", "salamander", "seal", "serpent", "sheep", "skunk", "snake", "snake", "sparrow", "spider", "spider", "springbok", "squirrel", "stallion", "sugar", "swallow", "swan", "sweety", "tapir", "tiger", "tiger", "toad", "toddler", "tumbler", "turtle", "viper", "walrus", "waterbuck", "weasel", "whale", "whelp", "wildcat", "wolf", "wolverine", "wombat", "woodchuck", "wriggler", "yak", "zebra"];
+				var nick_science = ["airmen", "beast", "believer", "bullet", "swush", "cadet", "dancer", "demon", "detective", "devil", "dolly", "dummy", "empire", "fever", "fiend", "fisherman", "freak", "gangster", "gazette", "genius", "gladiator", "goldfish", "goldbeast", "gravy", "hammer", "harmony", "invader", "jockey", "judge", "juggler", "king", "lady", "lord", "mutant", "phantom", "pilot", "pioneer", "pirate", "prisoner", "professor", "prophet", "ranger", "rebel", "romeo", "saint", "shadow", "sinner", "student", "titan", "trooper", "stud", "trustee", "villain", "volunteer", "warrior", "yodelers", "baroness", "beam", "breeze", "burst", "crystal", "emerald", "galaxy", "hammer", "hook", "hurricane", "iron", "knife", "laser", "moon", "moron", "rayz", "sapphire", "scissor", "space", "star", "steel", "storm", "sun"];
+
+				var prefix = color.concat(nick_adjective);
+				var n1 = parseInt(Math.random() * prefix.length);
+				var n1ex = parseInt(Math.random() * prefix.length);
+				if (n1ex == n1) {
+					n1ex = n1 + 1;
+				}
+				var prename = prefix[n1];
+				var prenameex = prefix[n1ex];
+
+				var suffix = nick_animal.concat(nick_science);
+				var n2 = parseInt(Math.random() * suffix.length);
+				var sufname = suffix[n2];
+
+				var n3 = parseInt(Math.random() * 100);
+				if (n3 <= 30)
+					name = [prename, sufname];
+				else if (n3 > 30 && n3 <= 40)
+					name = [prenameex, sufname];
+				else if (n3 > 40 && n3 <= 65)
+					name = [sufname, prenameex];
+				else if (n3 > 65 && n3 <= 84)
+					name = [prenameex, prename, sufname];
+				else if (n3 > 84 && n3 <= 88)
+					name = [sufname, sufname];
+				else if (n3 > 88 && n3 <= 90)
+					name = ["Los", sufname];
+				else if (n3 > 90 && n3 <= 92)
+					name = ["Der", sufname];
+				else if (n3 > 92 && n3 <= 94)
+					name = ["El", sufname];
+				else
+					name = ["The", sufname];
+
+				name = name.join(' '); 
+				return(name);
+			}
