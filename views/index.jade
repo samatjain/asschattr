@@ -96,24 +96,15 @@ html
 			var socket = io.connect();
 			socket.on('incoming', function(data) {
 				console.log('incoming: ' + data.msg);
-				var $new_entry = $('<article>' + data.msg + ' <time datetime=' + data.date + '>just now</time></article>');
-
-				// Hack for now; time only updated when new messages arrive
-				$('time').each(function() {
-					var $e = $(this);
-					var time_text = $e.attr('datetime');
-					time_text = moment(time_text).fromNow();
-					$e.text(time_text);
-				});
+				var $new_entry = $('<article>' + data.msg + ' <time datetime=' + data.date + '>a few seconds ago</time></article>');
 
 				appendNewMessage($new_entry);
 			});
 
 			function appendNewMessage($new_entry) {
 				// Cache selector locally
-				if (typeof appendNewMessage.$chat_log == 'undefined') {
+				if (typeof appendNewMessage.$chat_log == 'undefined')
 					appendNewMessage.$chat_log = $('#chat-log');
-				}
 				$chat_log = appendNewMessage.$chat_log;
 
 				// Add new entry (default CSS will make this hidden)
@@ -165,3 +156,18 @@ html
 					$('#chat-log').empty();
 				});
 			});
+
+			// Update times
+			// Hack for now… no need to be doing this many updates
+			function updateTimes() {
+				$('time').each(function() {
+					var $e = $(this);
+					var time_text = moment($e.attr('datetime')).fromNow();
+					var current_time_text = $e.text();
+
+					// Avoid updating DOM if unnecessary
+					if (current_time_text != time_text)
+						$e.text(time_text);
+				});
+			}
+			setInterval(updateTimes, 60000);
