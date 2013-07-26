@@ -6,6 +6,7 @@
 var express = require('express')
   , app = express()
   , http = require('http')
+  , html_strip = require('htmlstrip-native').html_strip
   , routes = require('./routes')
   , user = require('./routes/user')
   , path = require('path')
@@ -43,6 +44,7 @@ io.sockets.on('connection', function(socket) {
 	socket.emit('news', { hello: 'world' });
 	socket.on('msg', function(data) {
 		console.log(data);
+		data.msg = html_strip(data.msg);
 		io.sockets.emit('incoming', data);
 	});
 });
