@@ -19,9 +19,7 @@ html
 			}
 
 			article {
-				height: 0px;
 				max-height: 1000em;
-				opacity: 0;
 				display: block;
 				padding: 1ex;
 				border-bottom: 1px solid #ddd;
@@ -33,6 +31,10 @@ html
 				background-color: white;
 				overflow: hidden;
 				line-height: 0.9em;
+
+				/* Defaults keep new entries hidden. They must be animated into view */
+				height: 0px;
+				opacity: 0;
 				visibility: hidden;
 			}
 
