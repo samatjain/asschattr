@@ -18,7 +18,7 @@ html
 				margin: 0;
 			}
 
-			.chatEntry {
+			article {
 				height: 0px;
 				max-height: 1000em;
 				opacity: 0;
@@ -36,12 +36,12 @@ html
 				visibility: hidden;
 			}
 
-			.chatEntry time {
+			time {
 				font-style: italic;
 				color: silver;
 			}
 
-			#output {
+			#chat-log {
 				margin-top: 1ex;
 			}
 
@@ -71,7 +71,7 @@ html
 						input(class='input-xxlarge',type='text',name='entry',placeholder='type your chat message here, & press enter to send',autocomplete='off',autofocus='autofocus')
 						button(class='btn',type='submit') ♥
 
-		article(id='output',class='container')
+		main(id='chat-log',class='container')
 
 		footer(class='footer')
 			div(class='container')
@@ -96,9 +96,10 @@ html
 			var socket = io.connect();
 			socket.on('incoming', function(data) {
 				console.log('incoming: ' + data.msg);
-				var $new_entry = $('<div class="chatEntry" style="visibility: hidden; height: 0px">' + data.msg + ' <time datetime=' + data.date + '>a few seconds ago</time></div>');
+				var $new_entry = $('<article>' + data.msg + ' <time datetime=' + data.date + '>just now</time></article>');
 
-				$('.chatEntry time').each(function() {
+				// Hack for now; time only updated when new messages arrive
+				$('time').each(function() {
 					var $e = $(this);
 					var time_text = $e.attr('datetime');
 					time_text = moment(time_text).fromNow();
@@ -109,18 +110,23 @@ html
 			});
 
 			function appendNewMessage($new_entry) {
-				$('#output').prepend($new_entry);
+				// Cache selector locally
+				if (typeof appendNewMessage.$chat_log == 'undefined') {
+					appendNewMessage.$chat_log = $('#chat-log');
+				}
+				$chat_log = appendNewMessage.$chat_log;
+
+				// Add new entry (default CSS will make this hidden)
+				$new_entry.prependTo($chat_log);
 
 				// Hack for being unable to transition to height: auto
 				var $clone = $new_entry.clone();
 				$clone.css({'position': 'relative',
 										'visibility': 'hidden',
 										'height': 'auto'})
-							.addClass('slideClone').appendTo('#output');
+							.appendTo($chat_log);
 				var height = $clone.height();
 				$clone.remove();
-
-				console.log(height);
 
 				// Make entry visible…
 				$new_entry.css({'visibility': 'visible',
@@ -140,21 +146,22 @@ html
 			});
 
 			$(document).ready(function() {
-				var $welcome_msg = $('<div class="chatEntry">Welcome to <strong>asschattr</strong>. If people are around, you can listen in and wait for messages to appear—or just start typing and send one yourself!</div>');
+				var $welcome_msg = $('<article>Welcome to <strong>asschattr</strong>. If people are around, you can listen in and wait for messages to appear—or just start typing and send one yourself!</article>');
 				appendNewMessage($welcome_msg);
 			});
 
 			// Make sure events already displayed (which are fixed-height since they
 			// were animated) stay visible
 			$(window).on('resize orientationchange', function() {
-				$('.chatEntry').css({'height': 'auto'});
+				$('article').css({'height': 'auto'});
 			});
 
+			// Clear chat log
 			$('#clear-entries').on('click', function(ev) {
 				ev.preventDefault();
 
-				$('.chatEntry').css({'height': 0, 'opacity': 0})
+				$('article').css({'height': 0, 'opacity': 0})
 				.on('transitionend', function() {
-					$('#output').empty();
+					$('#chat-log').empty();
 				});
 			});
