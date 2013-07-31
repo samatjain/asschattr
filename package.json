@@ -9,6 +9,6 @@
     "express": "3.3.4",
     "jade": "*",
     "socket.io": "*",
-    "htmlstrip-native": "0.0.2"
+    "htmlstrip-native": "*"
   }
 }
