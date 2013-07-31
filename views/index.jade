@@ -1,7 +1,9 @@
 doctype 5
 html
 	head
-		title asschattr
+		title
+			| asschattr
+			= ': #' + hashtag
 
 		meta(charset='utf-8')
 		meta(name='viewport',content='width=device-width, initial-scale=1, user-scalable=no')
@@ -93,10 +95,11 @@ html
 				p .
 					Designed & built with ♥ in New Mexico, the <a href="http://www.kob.com/article/stories/s3077298.shtml">worst place to be a child</a>.
 				p .
-					Created by
-					<a href="https://twitter.com/SamatJain">@SamatJain</a>
-					(<a href="https://identi.ca/samatjain">also on Pump.io</a>),
-					Kenny Jacobs, and Antonio Arredondo. Thanks to an extremely supportive Felicia Frizzell.
+					Follow us on
+					a(href="https://www.twitter.com/asschattr") Twitter
+					or like us on
+					a(href="https://www.facebook.com/asschattr") Facebook
+					.
 				p .
 					Source code coming soon…
 
@@ -105,6 +108,7 @@ html
 		script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js')
 		script(src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.1.0/moment.min.js')
 		script .
+			var hashtag = '!{hashtag}';
 			var socket = io.connect();
 			socket.on('incoming', function(data) {
 				console.log('incoming: ' + data.msg);
@@ -158,7 +162,7 @@ html
 				console.log(screenname);
 
 				// This should only happen on connection to server
-				appendNewMessage($('<article>You are now connected to chatroom <strong>default</strong> as <strong>' + screenname + '</strong>. Have a nice day!</article>'));
+				appendNewMessage($('<article>You are now connected to chatroom <strong>#' + hashtag + '</strong> as <strong>' + screenname + '</strong>. Have a nice day!</article>'));
 			});
 
 			// Make sure events already displayed (which are fixed-height since they
