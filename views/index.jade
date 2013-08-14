@@ -105,6 +105,10 @@ html
 				p .
 					© <a href="http://blog.samat.org/">Samat K Jain</a>
 
+		audio(id='alert-sound')
+			source(src='sounds/alert.opus')
+			source(src='sounds/alert.mp3')
+
 		script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js')
 		script(src='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js')
 		script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js')
@@ -115,6 +119,9 @@ html
 			socket.on('incoming', function(data) {
 				console.log('incoming: ' + data.msg);
 				var $new_entry = $('<article><span class="author">' + data.screenname + ' • </span> ' + data.msg + ' <time datetime=' + data.date + '>a few seconds ago</time></article>');
+
+				// Play alert sound (need smarter logic here…)
+				$('#alert-sound').get(0).play();
 
 				appendNewMessage($new_entry);
 			});
