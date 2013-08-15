@@ -95,6 +95,8 @@ html
 				p .
 					Designed & built with ♥ in New Mexico, the <a href="http://www.kob.com/article/stories/s3077298.shtml">worst place to be a child</a>.
 				p .
+					Is asschattr blocked for you? Consider using our censored alternative, <a href="http://sasschattr.com/">sasscattr</a>.
+				p .
 					Follow us on
 					<a href="https://www.twitter.com/asschattr">Twitter</a>
 					or like us on
@@ -165,9 +167,14 @@ html
 				var $welcome_msg = $('<article>Welcome to <strong>asschattr</strong>. If people are around, you can listen in and wait for messages to appear—or just start typing and send one yourself!</article>');
 				appendNewMessage($welcome_msg);
 
-				var screenname = generateScreenName();
+				var screenname;
+				if (window.sessionStorage && sessionStorage.getItem('screenname')) {
+					screenname = sessionStorage.getItem('screenname');
+				} else {
+					screenname = generateScreenName();
+					sessionStorage.setItem('screenname', screenname);
+				}
 				window.screenname = screenname;
-
 				console.log(screenname);
 
 				// This should only happen on connection to server
