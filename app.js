@@ -44,7 +44,8 @@ io.sockets.on('connection', function(socket) {
 	socket.emit('news', { hello: 'world' });
 	socket.on('msg', function(data) {
 		console.log(data);
-		data.msg = html_strip(data.msg);
+		data.actor.displayName = html_strip(data.actor.displayName);
+		data.object.content = html_strip(data.object.content);
 		io.sockets.emit('incoming', data);
 	});
 });

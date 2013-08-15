@@ -119,8 +119,8 @@ html
 			var hashtag = '!{hashtag}';
 			var socket = io.connect();
 			socket.on('incoming', function(data) {
-				console.log('incoming: ' + data.msg);
-				var $new_entry = $('<article><span class="author">' + data.screenname + ' • </span> ' + data.msg + ' <time datetime=' + data.date + '>a few seconds ago</time></article>');
+				console.dir(data);
+				var $new_entry = $('<article><span class="author">' + data.actor.displayName + ' • </span> ' + data.object.content + ' <time datetime=' + data.published + '>a few seconds ago</time></article>');
 
 				// Play alert sound (need smarter logic here…)
 				$('#alert-sound').get(0).play();
@@ -159,7 +159,24 @@ html
 				if (!msg) return;
 				var now = moment().toJSON();
 				console.log('sending msg to server: ' + msg);
-				window.socket.emit('msg', {'date': now, msg: msg, screenname: window.screenname});
+				var datagram = {
+					verb: 'post',
+					published: now,
+					actor: {
+						id: window.screenname_urn,
+						displayName: window.screenname
+					},
+					object: {
+						id: 'urn:asschattr:comment:comment/' + guid(),
+						objectType: 'comment',
+						content: msg
+					},
+					to: {
+						id: 'urn:asschattr:hashtag:' + hashtag,
+						displayName: window.hashtag
+					}
+				};
+				window.socket.emit('msg', datagram);
 				$('input[name=entry]').val('');
 			});
 
@@ -175,7 +192,7 @@ html
 					sessionStorage.setItem('screenname', screenname);
 				}
 				window.screenname = screenname;
-				console.log(screenname);
+				window.screenname_urn = 'urn:asschattr:screenname:' + screenname.replace(' ', '-', 'gi');
 
 				// This should only happen on connection to server
 				appendNewMessage($('<article>You are now connected to chatroom <strong>#' + hashtag + '</strong> as <strong>' + screenname + '</strong>. Have a nice day!</article>'));
@@ -254,4 +271,12 @@ html
 					name = ["The", sufname];
 
 				return(name.join(' ')); 
+			}
+
+			// This should be server-side too… maybe?
+			function guid() {
+				return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+					var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+					return v.toString(16);
+				});
 			}
