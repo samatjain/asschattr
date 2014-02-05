@@ -1,4 +1,4 @@
-doctype 5
+doctype html
 html
 	head
 		title
@@ -11,7 +11,7 @@ html
 		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css')
 		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css')
 
-		style .
+		style.
 			body {
 				letter-spacing: -0.01em;
 				text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
@@ -89,22 +89,22 @@ html
 
 		footer(class='footer')
 			div(class='container')
-				p .
+				p.
 					<strong>asschattr</strong> lets you be an asshole on the Internet, without having to be an asshole in real life. Connect with other assholes and together, find meaning in the world.
 				img(src='/images/puppy-and-kitten.png',height='250',width='350',alt='puppy & kitten')
-				p .
+				p.
 					Designed & built with ♥ in New Mexico, the <a href="http://www.kob.com/article/stories/s3077298.shtml">worst place to be a child</a>.
-				p .
+				p.
 					Is asschattr blocked for you? Consider using our censored alternative, <a href="http://sasschattr.com/">sasscattr</a>.
-				p .
+				p.
 					Follow us on
 					<a href="https://www.twitter.com/asschattr">Twitter</a>
 					or like us on
 					<a href="https://www.facebook.com/asschattr">Facebook</a>
 					.
-				p .
+				p.
 					Source code coming soon…
-				p .
+				p.
 					© <a href="http://blog.samat.org/">Samat K Jain</a>
 
 		audio(id='alert-sound')
@@ -115,7 +115,7 @@ html
 		script(src='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js')
 		script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js')
 		script(src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.1.0/moment.min.js')
-		script .
+		script.
 			var hashtag = '!{hashtag}';
 			var socket = io.connect();
 			socket.on('incoming', function(data) {
@@ -176,6 +176,7 @@ html
 						displayName: window.hashtag
 					}
 				};
+				console.dir(datagram);
 				window.socket.emit('msg', datagram);
 				$('input[name=entry]').val('');
 			});
@@ -194,8 +195,28 @@ html
 				window.screenname = screenname;
 				window.screenname_urn = 'urn:asschattr:screenname:' + screenname.replace(' ', '-', 'gi');
 
-				// This should only happen on connection to server
+				// This should only happen on connection to server. Perhaps when we get the join event back?
 				appendNewMessage($('<article>You are now connected to chatroom <strong>#' + hashtag + '</strong> as <strong>' + screenname + '</strong>. Have a nice day!</article>'));
+
+				// Tell server we've joined
+				var now = moment().toJSON();
+				var datagram = {
+					verb: 'join',
+					published: now,
+					actor: {
+						id: window.screenname_urn,
+						displayName: window.screenname
+					},
+					object: {
+						id: 'urn:asschattr:hashtag:' + hashtag,
+						displayName: window.hashtag
+					},
+					to: {
+						id: 'urn:asschattr:hashtag:' + hashtag,
+						displayName: window.hashtag
+					}
+				}
+				window.socket.emit('join', datagram);
 			});
 
 			// Make sure events already displayed (which are fixed-height since they
@@ -208,6 +229,7 @@ html
 			$('#clear-entries').on('click', function(ev) {
 				ev.preventDefault();
 
+				// Animate deletion of chat entries, then remove them from the DOM
 				$('article').css({'height': 0, 'opacity': 0})
 				.on('transitionend', function() {
 					$('#chat-log').empty();

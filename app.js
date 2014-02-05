@@ -42,10 +42,15 @@ io = io.listen(server);
 
 io.sockets.on('connection', function(socket) {
 	socket.emit('news', { hello: 'world' });
+	socket.on('join', function(data) {
+		var room_name = html_strip(data.object.displayName);
+		socket.join(room_name);
+	});
 	socket.on('msg', function(data) {
 		console.log(data);
 		data.actor.displayName = html_strip(data.actor.displayName);
 		data.object.content = html_strip(data.object.content);
-		io.sockets.emit('incoming', data);
+		var room_name = html_strip(data.to.displayName);
+		io.sockets.in(room_name).emit('incoming', data);
 	});
 });
