@@ -8,13 +8,14 @@ html
 		meta(charset='utf-8')
 		meta(name='viewport',content='width=device-width, initial-scale=1, user-scalable=no')
 
-		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css')
-		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css')
+		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.0/css/bootstrap.min.css')
+		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.0/css/bootstrap-responsive.min.css')
 
 		style.
 			body {
 				letter-spacing: -0.01em;
 				text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+				font-size: 18.33px;
 			}
 
 			form {
@@ -22,23 +23,50 @@ html
 			}
 
 			article {
-				max-height: 1000em;
 				display: block;
-				padding: 1ex;
-				border-bottom: 1px solid #ddd;
-				transition: all 200ms ease;
-				-moz-transition: all 200ms ease;
-				-webkit-transition: all 200ms ease;
-				-o-transition: all 200ms ease;
-				-ms-transition: all 200ms ease;
+				padding: 0.5ex;
+				padding-top: 0.8ex; padding-bottom: 0.8ex;
+				border-bottom: 1px solid #f5f5f5;
 				background-color: white;
 				overflow: hidden;
 				line-height: 0.9em;
+			}
 
-				/* Defaults keep new entries hidden. They must be animated into view */
-				height: 0px;
+			article.delete {
+				-webkit-animation: growHeight 150ms ease-in-out reverse;
+				animation: growHeight 150ms ease-in-out reverse;
+			}
+
+			article.new-entry {
+				max-height: 0;
 				opacity: 0;
-				visibility: hidden;
+				animation: growHeight 200ms ease-in-out forwards;
+				-webkit-animation: growHeight 200ms ease-in-out forwards;
+			}
+			@keyframes growHeight {
+				from {
+					max-height: 0;
+					opacity: 0;
+					transform: scale(0);
+				}
+				to {
+					max-height: 4em;
+					max-height: -moz-max-content;
+					opacity: 1;
+					transform: scale(1);
+				}
+			}
+			@-webkit-keyframes growHeight {
+				from {
+					max-height: 0;
+					opacity: 0;
+					-webkit-transform: scale(0);
+				}
+				to {
+					max-height: 4em;
+					opacity: 1;
+					-webkit-transform: scale(1);
+				}
 			}
 
 			article:last-child {
@@ -55,10 +83,6 @@ html
 				font-weight: 600;
 			}
 
-			#chat-log {
-				margin-top: 1ex;
-			}
-
 			footer {
 				border-top: 1px solid rgb(229, 229, 229);
 				background-color: rgb(245, 245, 245);
@@ -67,34 +91,56 @@ html
 				text-align: center;
 			}
 
-	body
-		div(class='navbar navbar-static-top')
-			div(class='navbar-inner')
-				div(class='container')
-					ul(class='nav')
-						li(class='dropdown')
-							a(id='menu',class='brand dropdown-toggle',data-toggle='dropdown',data-target='#',href='/') asschattr <b class='caret'></b>
-							ul(class='dropdown-menu',role='menu')
-								li
-									a(href='/') home
-									a(href='/fuq') frequently unasked questions (fuq)
-								li(class='divider')
-								li
-									a(href='#',id='clear-entries') clear chat log
-					form(id='chat',class='navbar-form')
-						input(class='input-xxlarge',type='text',name='entry',placeholder='type your chat message here, & press enter to send',autocomplete='off',autofocus='autofocus')
-						button(class='btn',type='submit') ♥
+			.navbar {
+				margin-bottom: 0;
+			}
 
-		main(id='chat-log',class='container')
+			#chat-log.container-fluid {
+				padding: 0;
+				padding-left: 0.5ex; padding-right: 0.5ex;
+			}
+
+			#chat-entry {
+				position: fixed;
+				bottom: 0;
+				left: 0; right: 0;
+				background-color: #eee;
+				border-top: 1px solid #ccc;
+				padding: 0.2ex;
+			}
+
+	body
+		div(class='navbar navbar-default')
+			div(class='container-fluid')
+				ul(class='nav navbar-nav')
+					li(class='dropdown')
+						a(id='menu',class='navbar dropdown-toggle',data-toggle='dropdown',data-target='#',href='/') asschattr <b class='caret'></b>
+						ul(class='dropdown-menu')
+							li
+								a(href='/') home
+								a(href='/fuq') frequently unasked questions (fuq)
+							li(class='divider')
+							li
+								a(href='#',id='clear-entries') clear chat log
+
+
+		main(id='chat-log',class='container-fluid')
+
+		div(id='chat-entry')
+			form(id='chat')
+				div(class='input-group')
+					input(class='form-control',type='text',name='entry',placeholder='type your chat message here, & press enter to send',autocomplete='off',autofocus='autofocus')
+					span(class='input-group-btn')
+						button(class='btn btn-default',type='submit') ♥
 
 		footer(class='footer')
-			div(class='container')
+			div(class='container-fluid')
 				p.
 					<b>asschattr</b> is a virtual
 					<a href="https://en.wikipedia.org/wiki/Peanut_gallery">peanut gallery</a>
 					that lets you be a <b>troll</b> about <b>real-life</b>, in <b>real-time</b>.
 				p.
-					Pick a chat room (i.e. your favorite Twitter hashtag) where you can rant <b>pseudo-anonymously</b>. There are no logs—messages are only sent to those connected, and saved nowhere else)—and no login—only a random, funny name identifies you.
+					Pick a chat room (i.e. your favorite Twitter hashtag) where you can rant <b>pseudo-anonymously</b>. There are <b>no logs</b> (messages are only sent to those connected, and saved nowhere else) and <b>no logins</b> (only a random, funny name identifies you).
 				img(src='/images/puppy-and-kitten.png',height='250',width='350',alt='puppy & kitten')
 				p.
 					Designed & built with ♥  in
@@ -121,15 +167,14 @@ html
 			source(src='sounds/alert.opus')
 			source(src='sounds/alert.mp3')
 
-		script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js')
-		script(src='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js')
+		script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min.js')
+		script(src='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.0/js/bootstrap.min.js')
 		script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js')
 		script(src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.1.0/moment.min.js')
 		script.
 			var hashtag = '!{hashtag}';
 			var socket = io.connect();
 			socket.on('incoming', function(data) {
-				console.dir(data);
 				var $new_entry = $('<article><span class="author">' + data.actor.displayName + ' • </span> ' + data.object.content + ' <time datetime=' + data.published + '>a few seconds ago</time></article>');
 
 				// Play alert sound (need smarter logic here…)
@@ -144,22 +189,12 @@ html
 					appendNewMessage.$chat_log = $('#chat-log');
 				$chat_log = appendNewMessage.$chat_log;
 
+				$new_entry.addClass('new-entry');
+
 				// Add new entry (default CSS will make this hidden)
-				$new_entry.prependTo($chat_log);
-
-				// Hack for being unable to transition to height: auto
-				var $clone = $new_entry.clone();
-				$clone.css({'position': 'relative',
-										'visibility': 'hidden',
-										'height': 'auto'})
-							.appendTo($chat_log);
-				var height = $clone.height();
-				$clone.remove();
-
-				// Make entry visible…
-				$new_entry.css({'visibility': 'visible',
-												'height': height + 'px',
-												'opacity': 1});
+				$new_entry.prependTo($chat_log).on('animationend webkitAnimationEnd', function() {
+					$new_entry.removeClass('new-entry');
+				});
 			}
 
 			$('#chat').on('submit', function(ev) {
@@ -232,7 +267,7 @@ html
 			// Make sure events already displayed (which are fixed-height since they
 			// were animated) stay visible
 			$(window).on('resize orientationchange', function() {
-				$('article').css({'height': 'auto'});
+				$('article').css({'max-height': 'none'});
 			});
 
 			// Clear chat log
@@ -240,8 +275,8 @@ html
 				ev.preventDefault();
 
 				// Animate deletion of chat entries, then remove them from the DOM
-				$('article').css({'height': 0, 'opacity': 0})
-				.on('transitionend', function() {
+				$('article').addClass('delete')
+				.on('animationend webkitAnimationEnd', function() {
 					$('#chat-log').empty();
 				});
 			});
