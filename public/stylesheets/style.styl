@@ -17,11 +17,17 @@ article
 
 article.delete
 	animation: growHeight 150ms ease-in-out reverse;
+	-wekbit-animation: growHeight 150ms ease-in-out reverse;
+	-o-animation: growHeight 150ms ease-in-out reverse;
+	-ms-animation: growHeight 150ms ease-in-out reverse;
 
 article.new-entry
 	max-height: 0;
 	opacity: 0;
 	animation: growHeight 200ms ease-in-out forwards;
+	-webkit-animation: growHeight 200ms ease-in-out forwards;
+	-o-animation: growHeight 200ms ease-in-out forwards;
+	-moz-animation: growHeight 200ms ease-in-out forwards;
 
 @keyframes growHeight
 	from
